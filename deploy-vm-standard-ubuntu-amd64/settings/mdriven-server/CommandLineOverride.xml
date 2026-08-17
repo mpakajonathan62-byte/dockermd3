@@ -1,0 +1,6 @@
+<root>
+  <!-- Change from localhost or server-core to the exact live container ID -->
+  <arg>host=mdrivenstack-webapp-zvcaiw-server-core-1</arg>  
+  <arg>port=5011</arg>  
+  <arg>nohttps</arg>    
+</root>

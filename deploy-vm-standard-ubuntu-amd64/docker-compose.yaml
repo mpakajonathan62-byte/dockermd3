@@ -11,11 +11,11 @@ services:
         target: /app
 
       - type: bind
-        source: ${PROJECT_ROOT:-.}/settings/mdriven-server/CommandLineOverride.xml
+        source: ./settings/mdriven-server/CommandLineOverride.xml
         target: /app/App_Data/CommandLineOverride.xml
       
       - type: bind
-        source: ${PROJECT_ROOT:-.}/settings/mdriven-server/DatabaseVistaDB.vdb6
+        source: ./settings/mdriven-server/DatabaseVistaDB.vdb6
         target: /app/App_Data/DatabaseVistaDB.vdb6
     
     environment:
@@ -36,19 +36,19 @@ services:
         target: /app
 
       - type: bind
-        source: ${PROJECT_ROOT:-.}/settings/mdriven-turnkey/CommandLineOverride.xml
+        source: ./settings/mdriven-turnkey/CommandLineOverride.xml
         target: /app/App_Data/CommandLineOverride.xml
       
       - type: bind
-        source: ${PROJECT_ROOT:-.}/settings/mdriven-turnkey/HardServerUrl.xml
+        source: ./settings/mdriven-turnkey/HardServerUrl.xml
         target: /app/App_Data/HardServerUrl.xml
       
       - type: bind
-        source: ${PROJECT_ROOT:-.}/settings/mdriven-turnkey/MDrivenServerOverride.xml
+        source: ./settings/mdriven-turnkey/MDrivenServerOverride.xml
         target: /app/App_Data/MDrivenServerOverride.xml
       
       - type: bind
-        source: ${PROJECT_ROOT:-.}/settings/mdriven-turnkey/TurnkeySettingsOverride.xml
+        source: ./settings/mdriven-turnkey/TurnkeySettingsOverride.xml
         target: /app/App_Data/TurnkeySettingsOverride.xml
     
     depends_on:
@@ -87,10 +87,6 @@ services:
 
   nginx:
     image: nginx:alpine
-    # Using the inline config defined at the bottom of this file
-    configs:
-      - source: nginx_conf
-        target: /etc/nginx/conf.d/default.conf
     depends_on:
       scm:
         condition: service_started
@@ -101,11 +97,9 @@ services:
       - 5011:5011
       - 5012:5012
       - 8080:8080
-
-# Inline text injection block to replace external file mounts
-configs:
-  nginx_conf:
-    inline: |
+    entrypoint: /bin/sh -c
+    command: >
+      "echo '
       server {
           listen 5011;
           location / {
@@ -129,9 +123,9 @@ configs:
               proxy_set_header Host $$host;
               proxy_set_header X-Real-IP $$remote_addr;
               proxy_set_header Upgrade $$http_upgrade;
-              proxy_set_header Connection "upgrade";
+              proxy_set_header Connection \"upgrade\";
           }
-      }
+      }' > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
 
 volumes:
   MDSData:

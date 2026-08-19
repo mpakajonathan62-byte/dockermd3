@@ -23,13 +23,9 @@ services:
         source: ${PROJECT_ROOT:-.}/settings/mdriven-server/DatabaseVistaDB.vdb6
         target: /app/App_Data/DatabaseVistaDB.vdb6
     
+    # Healthcheck disabled cleanly here
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5011/"]
-      interval: 15s
-      timeout: 15s
-      retries: 5
-      start_period: 50s
-      disable:true
+      disable: true
     
     environment:
       - PUID=1000
@@ -68,9 +64,10 @@ services:
         source: ${PROJECT_ROOT:-.}/settings/mdriven-turnkey/TurnkeySettingsOverride.xml
         target: /app/App_Data/TurnkeySettingsOverride.xml
     
+    # Changed condition to service_started since server-core no longer healthchecks
     depends_on:
       server-core:
-        condition: service_healthy
+        condition: service_started
         restart: true
 
     healthcheck:
@@ -113,32 +110,6 @@ services:
         source: MDTData
         target: /config/workspace/MDrivenTurnkey
         read_only: false
-      
-      ## Uncomment for stricter file manager and terminal permissions
-      # - type: bind
-      #   source: ${PROJECT_ROOT:-.}/settings/vscode/.config
-      #   target: /config/.config
-      #   read_only: true
-      
-      # - type: bind
-      #   source: ${PROJECT_ROOT:-.}/settings/vscode/data/User/settings.json
-      #   target: /config/data/User/settings.json
-      #   read_only: true
-
-      # - type: bind
-      #   source: ${PROJECT_ROOT:-.}/settings/vscode/extensions/extensions.json
-      #   target: /config/extensions/extensions.json
-      #   read_only: true
-    
-    # tmpfs:
-    #   - /run:uid=1000,gid=1000,exec,size=64m
-    #   - /tmp:size=128m
-
-    # security_opt:
-    #   - no-new-privileges=true
-
-    # user: "1000:1000"
-    # read_only: true
 
   nginx:
     image: nginx:alpine

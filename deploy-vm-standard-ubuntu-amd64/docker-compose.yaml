@@ -79,12 +79,11 @@ services:
       - type: volume
         source: MDSData
         target: /config/workspace/MDrivenServer
-        read_only: false
       - type: volume
         source: MDTData
         target: /config/workspace/MDrivenTurnkey
-        read_only: false
-          nginx:
+
+  nginx:
     image: nginx:alpine
     depends_on:
       scm:
@@ -126,5 +125,6 @@ services:
           }
       }' > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
 
-
- 
+volumes:
+  MDSData:
+  MDTData:

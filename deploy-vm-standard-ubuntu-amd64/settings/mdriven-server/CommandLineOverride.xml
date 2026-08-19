@@ -1,6 +1,5 @@
-<root>
-  <!-- Change from localhost or server-core to the exact live container ID -->
-  <arg>host=mdrivenstack-webapp-zvcaiw-server-core-1</arg>  
-  <arg>port=5011</arg>  
-  <arg>nohttps</arg>    
-</root>
+<?xml version="1.0" encoding="utf-8"?>
+<MDrivenServerOverride xmlns:xsd="http://w3.org" xmlns:xsi="http://w3.org-instance">
+  <!-- Change this line to use your current Dokploy container name and port -->
+  <ServerUrl>http://rentlyug-app-g81nkc-server-core-1:5011</ServerUrl>
+</MDrivenServerOverride>

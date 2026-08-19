@@ -29,6 +29,7 @@ services:
       timeout: 15s
       retries: 5
       start_period: 50s
+      disable:true
     
     environment:
       - PUID=1000

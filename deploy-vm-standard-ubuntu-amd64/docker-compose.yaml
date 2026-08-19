@@ -25,10 +25,10 @@ services:
     
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5011/"]
-      interval: 10s
-      timeout: 10s
+      interval: 15s
+      timeout: 15s
       retries: 5
-      start_period: 30s
+      start_period: 50s
     
     environment:
       - PUID=1000

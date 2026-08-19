@@ -84,8 +84,7 @@ services:
         source: MDTData
         target: /config/workspace/MDrivenTurnkey
         read_only: false
-
-  nginx:
+          nginx:
     image: nginx:alpine
     depends_on:
       scm:
@@ -103,7 +102,7 @@ services:
       server {
           listen 5011;
           location / {
-              proxy_pass http://server-core:5011;
+              proxy_pass http://rentlyug-app-g81nkc-server-core-1:5011;
               proxy_set_header Host $$host;
               proxy_set_header X-Real-IP $$remote_addr;
           }
@@ -111,7 +110,7 @@ services:
       server {
           listen 5012;
           location / {
-              proxy_pass http://turnkey-core:5012;
+              proxy_pass http://rentlyug-app-g81nkc-turnkey-core-1:80;
               proxy_set_header Host $$host;
               proxy_set_header X-Real-IP $$remote_addr;
           }
@@ -119,7 +118,7 @@ services:
       server {
           listen 8080;
           location / {
-              proxy_pass http://scm:8080;
+              proxy_pass http://rentlyug-app-g81nkc-scm-1:8080;
               proxy_set_header Host $$host;
               proxy_set_header X-Real-IP $$remote_addr;
               proxy_set_header Upgrade $$http_upgrade;
@@ -127,6 +126,5 @@ services:
           }
       }' > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
 
-volumes:
-  MDSData:
-  MDTData:
+
+ 

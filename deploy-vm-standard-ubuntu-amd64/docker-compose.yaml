@@ -23,10 +23,6 @@ services:
         source: ${PROJECT_ROOT:-.}/settings/mdriven-server/DatabaseVistaDB.vdb6
         target: /app/App_Data/DatabaseVistaDB.vdb6
     
-    # Healthcheck disabled cleanly here
-    healthcheck:
-      disable: true
-    
     environment:
       - PUID=1000
       - PGID=1000
@@ -64,18 +60,10 @@ services:
         source: ${PROJECT_ROOT:-.}/settings/mdriven-turnkey/TurnkeySettingsOverride.xml
         target: /app/App_Data/TurnkeySettingsOverride.xml
     
-    # Changed condition to service_started since server-core no longer healthchecks
     depends_on:
       server-core:
         condition: service_started
         restart: true
-
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5012/"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
 
     environment:
       - PUID=1000
@@ -123,7 +111,7 @@ services:
       scm:
         condition: service_started
       turnkey-core:
-        condition: service_healthy
+        condition: service_started
         restart: true
     
     ports:
